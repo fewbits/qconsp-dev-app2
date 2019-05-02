@@ -33,15 +33,15 @@ build:
     # Salvando informações sobre esta imagem para usar adiante no Workflow
     - shipctl put_resource_state $SHIP_IMG_RES versionName $BRANCH.$BUILD_NUMBER
 
-# resources:
-#   # Imagem Docker gerada
-#   - name: docker_image_2
-#     type: image
-#     integration: docker-registry
-#     versionTemplate:
-#       sourceName: "lowbit/qconsp-app2"
-#       isPull: false
-#       versionName: latest
+resources:
+  # Imagem Docker gerada
+  - name: docker_image_2
+    type: image
+    integration: docker-registry
+    versionTemplate:
+      sourceName: "lowbit/qconsp-app2"
+      isPull: false
+      versionName: latest
 
 # jobs:
 #   # Gravando a versão da imagem no objeto (recurso) acima
