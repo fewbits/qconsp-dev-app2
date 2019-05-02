@@ -47,5 +47,5 @@ jobs:
   # Gravando a versão da imagem no objeto (recurso) acima
   - name: qconsp-dev-app2_runCI
     type: runCI
-    # steps:
-    #   - OUT: docker_image_2
+    steps:
+      - OUT: docker_image_2
