@@ -1,0 +1,55 @@
+---
+
+# Linguagem e versão do projeto
+# language: node_js
+# node_js:
+#   - 8.15.1
+
+# Quais branches acionarão os jobs
+branches:
+  only:
+    - master
+
+# Integração com o Docker Registry
+integrations:
+  hub:
+    - integrationName: docker-registry
+      type: dockerRegistryLogin
+
+# Variáveis
+env:
+  global:
+    # - TEST_RESULTS_DIR=$SHIPPABLE_REPO_DIR/shippable/testresults
+    # - CODE_COVERAGE_DIR=$SHIPPABLE_REPO_DIR/shippable/codecoverage
+    # - TESTS_LOC_DIR=$SHIPPABLE_REPO_DIR/test
+    # - MOD_LOC=$SHIPPABLE_REPO_DIR/node_modules/.bin/
+    - DOCKER_REPO="qconsp-app2"
+    - DOCKER_ACC=lowbit
+    - SHIP_IMG_RES="docker_image_2"
+
+build:
+  ci:
+    # Construindo imagem docker
+    - docker build -t $DOCKER_ACC/$DOCKER_REPO:$BRANCH.$BUILD_NUMBER .
+    # Armazenando imagem docker
+    - docker push $DOCKER_ACC/$DOCKER_REPO:$BRANCH.$BUILD_NUMBER
+  on_success:
+    # Salvando informações sobre esta imagem para usar adiante no Workflow
+    - shipctl put_resource_state $SHIP_IMG_RES versionName $BRANCH.$BUILD_NUMBER
+
+resources:
+  # Imagem Docker gerada
+  - name: docker_image_2
+    type: image
+    integration: docker-registry
+    versionTemplate:
+      sourceName: "lowbit/qconsp-app2"
+      isPull: false
+      versionName: latest
+
+jobs:
+  # Gravando a versão da imagem no objeto (recurso) acima
+  - name: qconsp-dev-app2_runCI
+    type: runCI
+    steps:
+      - OUT: docker_image_2
