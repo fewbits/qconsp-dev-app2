@@ -1,9 +1,6 @@
 ---
-
 # Linguagem e versão do projeto
 language: node_js
-# node_js:
-#   - 8.15.1
 
 # Quais branches acionarão os jobs
 branches:
@@ -19,9 +16,9 @@ integrations:
 # Variáveis
 env:
   global:
-    - DOCKER_REPO="qconsp-app2"
+    - DOCKER_REPO="qconsp-site"
     - DOCKER_ACC=lowbit
-    - SHIP_IMG_RES="docker_image_2"
+    - SHIP_IMG_RES="docker_image_site"
 
 build:
   ci:
@@ -35,17 +32,17 @@ build:
 
 resources:
   # Imagem Docker gerada
-  - name: docker_image_2
+  - name: docker_image_site
     type: image
     integration: docker-registry
     versionTemplate:
-      sourceName: "lowbit/qconsp-app2"
+      sourceName: "lowbit/qconsp-site"
       isPull: false
       versionName: latest
 
 jobs:
   # Gravando a versão da imagem no objeto (recurso) acima
-  - name: qconsp-dev-app2_runCI
+  - name: qconsp-dev-site_runCI
     type: runCI
     steps:
-      - OUT: docker_image_2
+      - OUT: docker_image_site
